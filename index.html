@@ -144,6 +144,17 @@
   .notif.error { border-color:var(--danger); }
   @keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
 
+  /* HAMBURGER + MOBILE MENU */
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:8px; background:none; border:none; }
+  .hamburger span { display:block; width:22px; height:2px; background:var(--text); border-radius:2px; transition:all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity:0; }
+  .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display:none; position:fixed; top:61px; left:0; right:0; background:rgba(10,14,26,0.98); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); z-index:98; padding:12px 16px 24px; flex-direction:column; gap:4px; }
+  .mobile-menu.open { display:flex; animation:fadeIn 0.2s ease; }
+  .mobile-menu .nav-btn { text-align:left; padding:14px 16px; font-size:0.92rem; border-radius:10px; width:100%; color:var(--text); }
+  .mobile-menu .nav-btn:hover { background:rgba(0,229,160,0.08); color:var(--accent); }
+
   /* RESPONSIVE */
   @media(max-width:768px) {
     .page { padding:20px; }
@@ -151,6 +162,8 @@
     .stats-row { grid-template-columns:repeat(2,1fr); }
     nav { padding:14px 20px; }
     .nav-links { display:none; }
+    .hamburger { display:flex; }
+    .nav-user .btn { font-size:0.72rem; padding:7px 12px; }
   }
 
   /* Scrollbar */
@@ -202,10 +215,24 @@
     <button class="nav-btn" onclick="requireAuth('dashboard')">Dashboard</button>
     <button class="nav-btn" onclick="requireAuth('admin')">Admin</button>
   </div>
-  <div class="nav-user" id="navUser">
-    <button class="btn btn-outline btn-sm" onclick="showPage('auth')">Sign In</button>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="nav-user" id="navUser">
+      <button class="btn btn-outline btn-sm" onclick="showPage('auth')">Sign In</button>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="nav-btn" onclick="mobileNav('home')">🏠 Home</button>
+  <button class="nav-btn" onclick="mobileNav('plans')">🎫 Plans &amp; Subscriptions</button>
+  <button class="nav-btn" onclick="mobileNav('book')">🚌 Book a Trip</button>
+  <button class="nav-btn" onclick="mobileNav('dashboard')">📊 My Dashboard</button>
+  <button class="nav-btn" onclick="mobileNav('admin')">🛡️ Admin Panel</button>
+</div>
 
 <!-- PAYMENT MODAL -->
 <div class="modal-overlay" id="paymentModal">
@@ -670,6 +697,26 @@
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ============================================================
+// MOBILE MENU
+// ============================================================
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function mobileNav(page) {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  if (page === 'dashboard' || page === 'admin') {
+    requireAuth(page);
+  } else {
+    showPage(page);
+  }
+}
+
 // ============================================================
 // STATE MANAGEMENT
 // ============================================================
