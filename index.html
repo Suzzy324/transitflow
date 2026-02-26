@@ -227,11 +227,11 @@
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-  <button class="nav-btn" onclick="mobileNav('home')">🏠 Home</button>
-  <button class="nav-btn" onclick="mobileNav('plans')">🎫 Plans &amp; Subscriptions</button>
-  <button class="nav-btn" onclick="mobileNav('book')">🚌 Book a Trip</button>
-  <button class="nav-btn" onclick="mobileNav('dashboard')">📊 My Dashboard</button>
-  <button class="nav-btn" onclick="mobileNav('admin')">🛡️ Admin Panel</button>
+  <button class="nav-btn" onclick="mobileNav('home')" style="font-size:1rem;padding:18px 16px;color:var(--text);width:100%;text-align:left;background:none;border:none;cursor:pointer;border-radius:10px;">🏠 Home</button>
+  <button class="nav-btn" onclick="mobileNav('plans')" style="font-size:1rem;padding:18px 16px;color:var(--text);width:100%;text-align:left;background:none;border:none;cursor:pointer;border-radius:10px;">🎫 Plans &amp; Subscriptions</button>
+  <button class="nav-btn" onclick="mobileNav('book')" style="font-size:1rem;padding:18px 16px;color:var(--text);width:100%;text-align:left;background:none;border:none;cursor:pointer;border-radius:10px;">🚌 Book a Trip</button>
+  <button class="nav-btn" onclick="mobileNav('dashboard')" style="font-size:1rem;padding:18px 16px;color:var(--text);width:100%;text-align:left;background:none;border:none;cursor:pointer;border-radius:10px;">📊 My Dashboard</button>
+  <button class="nav-btn" onclick="mobileNav('admin')" style="font-size:1rem;padding:18px 16px;color:var(--text);width:100%;text-align:left;background:none;border:none;cursor:pointer;border-radius:10px;">🛡️ Admin Panel</button>
 </div>
 
 <!-- PAYMENT MODAL -->
@@ -708,13 +708,19 @@ function toggleMobileMenu() {
 }
 
 function mobileNav(page) {
+  // Close menu first
   document.getElementById('mobileMenu').classList.remove('open');
   document.getElementById('hamburger').classList.remove('open');
-  if (page === 'dashboard' || page === 'admin') {
-    requireAuth(page);
-  } else {
-    showPage(page);
-  }
+  // Small delay so menu closes before page switches
+  setTimeout(function() {
+    if (page === 'dashboard' || page === 'admin') {
+      requireAuth(page);
+    } else {
+      showPage(page);
+    }
+    // Scroll to top so user sees the new page
+    window.scrollTo(0, 0);
+  }, 150);
 }
 
 // ============================================================
